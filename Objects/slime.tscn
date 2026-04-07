@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://ctde5pvn24567"]
+
+[ext_resource type="Script" uid="uid://cc73pnnhqqf27" path="res://Scripts/Enemy.gd" id="1_edmjf"]
+[ext_resource type="Texture2D" uid="uid://de01kxkgewoiw" path="res://Assets/Images/Basic Platformer Asset Pack/Enemy (Slime)/sEnemy_Jumping.png" id="2_dnm5c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xv22k"]
+atlas = ExtResource("2_dnm5c")
+region = Rect2(0, 0, 17, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aulx2"]
+atlas = ExtResource("2_dnm5c")
+region = Rect2(17, 0, 17, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sg108"]
+atlas = ExtResource("2_dnm5c")
+region = Rect2(34, 0, 17, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yuq2k"]
+atlas = ExtResource("2_dnm5c")
+region = Rect2(51, 0, 17, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnm5c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xv22k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aulx2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sg108")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yuq2k")
+}],
+"loop": false,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d3xos"]
+size = Vector2(16.000004, 9.400002)
+
+[node name="Slime" type="CharacterBody2D" unique_id=2016804644]
+scale = Vector2(5, 5)
+script = ExtResource("1_edmjf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=874710663]
+sprite_frames = SubResource("SpriteFrames_dnm5c")
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1916015719]
+position = Vector2(-0.6000001, 1.6999996)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_d3xos")
+
+[node name="JumpTimer" type="Timer" parent="." unique_id=1362878387]
+wait_time = 2.0
+autostart = true
+
+[connection signal="timeout" from="JumpTimer" to="." method="_on_jump_timer_timeout"]

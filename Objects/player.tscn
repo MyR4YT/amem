@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bky2u7emv3s72" path="res://Scripts/Movimento.gd" id="1_y0qk3"]
 [ext_resource type="Texture2D" uid="uid://dhfokrv3ao288" path="res://Assets/Images/Basic Platformer Asset Pack/Player Sprites/sPlayer_Idle.png" id="2_3y5cq"]
+[ext_resource type="Texture2D" uid="uid://dcloweteotug4" path="res://Assets/Images/Basic Platformer Asset Pack/Player Sprites/sPlayer_Running.png" id="3_2i4gt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3y5cq"]
-size = Vector2(13.333334, 20)
+size = Vector2(13.333334, 19.777779)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2i4gt"]
 atlas = ExtResource("2_3y5cq")
@@ -13,6 +14,22 @@ region = Rect2(0, 0, 16, 18)
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ad8t"]
 atlas = ExtResource("2_3y5cq")
 region = Rect2(16, 0, 16, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x20fu"]
+atlas = ExtResource("3_2i4gt")
+region = Rect2(0, 0, 16, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ar0x"]
+atlas = ExtResource("3_2i4gt")
+region = Rect2(16, 0, 16, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_slvmq"]
+atlas = ExtResource("3_2i4gt")
+region = Rect2(32, 0, 16, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ng3n2"]
+atlas = ExtResource("3_2i4gt")
+region = Rect2(48, 0, 16, 18)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_x20fu"]
 animations = [{
@@ -26,22 +43,38 @@ animations = [{
 "loop": true,
 "name": &"Idle",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x20fu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ar0x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_slvmq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ng3n2")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
 }]
 
 [node name="Player" type="CharacterBody2D" unique_id=337665329]
 script = ExtResource("1_y0qk3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2057674224]
-position = Vector2(-1.4305115e-06, 0)
+position = Vector2(-1.4305115e-06, -0.50000024)
 scale = Vector2(4.5, 4.5)
 shape = SubResource("RectangleShape2D_3y5cq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1757923529]
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_x20fu")
-animation = &"Idle"
+animation = &"Walk"
 autoplay = "Idle"
-frame_progress = 0.50600135
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=746943473]
 position_smoothing_enabled = true
