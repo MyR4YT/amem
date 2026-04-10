@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://b5oxalc701t3" path="res://Objects/hud.tscn" id="3_cq7l2"]
 [ext_resource type="PackedScene" uid="uid://by240ul8qx0jy" path="res://Objects/coin.tscn" id="4_efuq8"]
 [ext_resource type="PackedScene" uid="uid://ctde5pvn24567" path="res://Objects/slime.tscn" id="5_gw3gf"]
+[ext_resource type="AudioStream" uid="uid://c7768lbogsx8b" path="res://Assets/F-777_-_Deadlocked_Full_VERSION_KLICKAUD.mp3" id="6_hya8f"]
+[ext_resource type="PackedScene" uid="uid://p6erood4sx6u" path="res://Objects/Plant.tscn" id="7_aw74n"]
+[ext_resource type="Texture2D" uid="uid://b40rtlcdwsmub" path="res://Assets/Images/58cab525-a7f1-4940-866a-3c2db770e229.jpg" id="8_sl6av"]
 
 [node name="Fase 1" type="Node2D" unique_id=63488111]
 
@@ -31,3 +34,20 @@ position = Vector2(1088, 352)
 
 [node name="Slime" parent="." unique_id=2016804644 instance=ExtResource("5_gw3gf")]
 position = Vector2(863.99994, 447.99997)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=445133402]
+stream = ExtResource("6_hya8f")
+autoplay = true
+
+[node name="CharacterBody2D" parent="." unique_id=1987673176 instance=ExtResource("7_aw74n")]
+position = Vector2(1496, 344)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1336328954]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=786745672]
+motion_scale = Vector2(0, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=684888708]
+position = Vector2(1024, 528)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_sl6av")

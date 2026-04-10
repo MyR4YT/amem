@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://p6erood4sx6u"]
+
+[ext_resource type="Script" uid="uid://cfbjy1qobu5eh" path="res://Scripts/Plant.gd" id="1_bua04"]
+[ext_resource type="PackedScene" uid="uid://c1lbj86cfq6bc" path="res://Objects/bullet.tscn" id="2_28o3g"]
+[ext_resource type="Texture2D" uid="uid://bubmdx2q4vfat" path="res://Assets/Images/plants-vs-zombies-garden-warfare-pixel-art-peashooter-png-favpng-nECRw1G7y2BhiDKLuyuGN2Dgs-removebg-preview.png" id="2_wjnt0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjnt0"]
+size = Vector2(15.3518715, 16.05218)
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1987673176]
+scale = Vector2(0.3, 0.3)
+script = ExtResource("1_bua04")
+bullet_scene = ExtResource("2_28o3g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=452427670]
+position = Vector2(-15.999998, 40.116283)
+scale = Vector2(20.323257, 20.323257)
+shape = SubResource("RectangleShape2D_wjnt0")
+disabled = true
+
+[node name="Timer" type="Timer" parent="." unique_id=317806951]
+wait_time = 3.0
+autostart = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1544809622]
+scale = Vector2(-1, 1)
+texture = ExtResource("2_wjnt0")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
