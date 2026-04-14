@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://d2fqctrm3wrse"]
+
+[ext_resource type="Script" uid="uid://ck802qoik75xt" path="res://Scripts/p_block.gd" id="1_agb4h"]
+[ext_resource type="Texture2D" uid="uid://chcc5n07kw7ma" path="res://Assets/Images/Basic Platformer Asset Pack/World Objects/sBlueBlock.png" id="1_dw5mb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_agb4h"]
+size = Vector2(16.000002, 16.000002)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mmce"]
+atlas = ExtResource("1_dw5mb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6ktg"]
+atlas = ExtResource("1_dw5mb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1y8ih"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1mmce")
+}],
+"loop": true,
+"name": &"Active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g6ktg")
+}],
+"loop": true,
+"name": &"Normal",
+"speed": 5.0
+}]
+
+[node name="PBlock" type="StaticBody2D" unique_id=1391782759]
+scale = Vector2(5, 5)
+script = ExtResource("1_agb4h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1573811065]
+position = Vector2(-9.536742e-08, -9.536742e-08)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_agb4h")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=8134330]
+sprite_frames = SubResource("SpriteFrames_1y8ih")
+animation = &"Normal"
+autoplay = "Normal"

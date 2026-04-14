@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://b0g83jpsg0gbs"]
+
+[ext_resource type="Texture2D" uid="uid://c4oloapx2ycuv" path="res://Assets/Images/Basic Platformer Asset Pack/World Objects/sBlueSwitch.png" id="1_uvi2c"]
+[ext_resource type="Script" uid="uid://10s1enup2iqq" path="res://Scripts/p_button.gd" id="1_wyfn6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wyfn6"]
+atlas = ExtResource("1_uvi2c")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uff4"]
+atlas = ExtResource("1_uvi2c")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lf0pr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wyfn6")
+}],
+"loop": true,
+"name": &"Normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6uff4")
+}],
+"loop": true,
+"name": &"Pressed",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1fq6l"]
+size = Vector2(16, 10.666667)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rbuj2"]
+size = Vector2(12, 5.333333)
+
+[node name="PButton" type="StaticBody2D" unique_id=2109395404]
+scale = Vector2(5, 5)
+script = ExtResource("1_wyfn6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=766795506]
+sprite_frames = SubResource("SpriteFrames_lf0pr")
+animation = &"Normal"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2088024301]
+position = Vector2(0, 2.6666665)
+shape = SubResource("RectangleShape2D_1fq6l")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=287642275]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1471821871]
+position = Vector2(0, -5.3333335)
+shape = SubResource("RectangleShape2D_rbuj2")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

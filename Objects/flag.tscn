@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://dgqamf3ghkebj"]
+
+[ext_resource type="Texture2D" uid="uid://b2wmywfhw37fd" path="res://Assets/Images/Basic Platformer Asset Pack/World Objects/sCheckpoint.png" id="1_gq36a"]
+[ext_resource type="Script" uid="uid://brqonaqcwb2q7" path="res://Scripts/flag.gd" id="1_vr4p2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vr4p2"]
+size = Vector2(14.8, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xuy75"]
+atlas = ExtResource("1_gq36a")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fiuc1"]
+atlas = ExtResource("1_gq36a")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkdk4"]
+atlas = ExtResource("1_gq36a")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5hfuy"]
+atlas = ExtResource("1_gq36a")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ikjgb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xuy75")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fiuc1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkdk4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5hfuy")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Flag" type="Area2D" unique_id=663017752]
+scale = Vector2(5, 5)
+script = ExtResource("1_vr4p2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=394249292]
+position = Vector2(2.5999992, 7.6293935e-07)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_vr4p2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=36095098]
+sprite_frames = SubResource("SpriteFrames_ikjgb")
+animation = &"Idle"
+autoplay = "Idle"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

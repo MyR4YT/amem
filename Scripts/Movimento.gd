@@ -1,46 +1,74 @@
 extends CharacterBody2D
 
-
 var SPEED = 300.0
 var JUMP_VELOCITY = -400.0
+var is_hurting := false 
 
 @onready var anim = $AnimatedSprite2D
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	# 1. Aplica a gravidade sempre
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Handle jump.
+	# 2. Lógica do Knockback
+	if is_hurting:
+		# A MÁGICA AQUI: Só sai do estado de dano se tocar o chão E a velocidade Y
+		# for maior ou igual a zero (ou seja, você já subiu e agora caiu/pousou).
+		if is_on_floor() and velocity.y >= 0:
+			is_hurting = false
+		else:
+			# Se ainda está voando pelo empurrão, apenas move e encerra o frame
+			move_and_slide()
+			return 
+
+	# --- DAQUI PRA BAIXO É O MOVIMENTO NORMAL (só roda se is_hurting for false) ---
+
 	if Input.is_action_just_pressed("pulo") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis("left", "right")
-	if direction: # Se o jogador estiver apertando algum botão de andar...
-		velocity.x = direction * SPEED # Aplica a velocidade
-		anim.play("Walk") # Toca a animação "run"
-		anim.flip_h = (direction < 0) # Vira a imagem para a esquerda se direction for negativo
-	else: # Se soltou os botões...
-		velocity.x = move_toward(velocity.x, 0, SPEED) # Freia o personagem
-		anim.play("Idle") # Toca a animação "idle"
+	
+	# Gerenciamento de Animações
+	if not is_on_floor():
+		if velocity.y < 0:
+			anim.play("Jump")
+		else:
+			anim.play("Fall")
+	elif direction != 0:
+		anim.play("Walk")
+		anim.flip_h = (direction < 0)
+	else:
+		anim.play("Idle")
+
+	# Movimentação Horizontal
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
 
-# Adicione no final do script do Player.gd
+# --- FUNÇÕES EXTRAS ---
 
-func take_damage():
-	Global.health -= 1 # Tira 1 do Global.health
+func take_damage(knockback_force := Vector2(-200, -200)):
+	if is_hurting: return 
 	
-	if Global.health <= 0: # Se a vida chegar a zero ou menos...
-		die()              # ...chama a função de morte
+	is_hurting = true
+	Global.health -= 1
+	
+	# Aplica o empurrão (Isso faz a velocity.y ficar negativa instantaneamente)
+	velocity = knockback_force
+	anim.play("Damage")
+	
+	if Global.health <= 0:
+		die()
+	
+	# Removemos totalmente o Timer daqui! 
+	# A física no _physics_process agora cuida de saber a hora exata de parar.
 
 func die():
-	print("Game Over - O jogador morreu!")
-	Global.health = 3 # Reseta vida para a próxima tentativa
-	Global.coins = 0  # Opcional: faz o jogador perder as moedas ao morrer
-	
-	# Recarrega a cena atual imediatamente (recomeça a fase)
-	# Mais tarde vamos mudar isso para ir para uma Tela de Game Over de verdade
+	print("Game Over!")
+	Global.health = 3
+	Global.coins = 0
 	get_tree().reload_current_scene()

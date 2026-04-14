@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_ljs67"]
 
 [node name="Area2D" type="Area2D" unique_id=1160152598]
-scale = Vector2(4, 4)
+scale = Vector2(3, 3)
 script = ExtResource("1_ubr88")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=171568733]
