@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://c8mtklc8s4d45"]
+
+[ext_resource type="Script" uid="uid://y5altwmkrv36" path="res://Scripts/koopa.gd" id="1_ihs7i"]
+[ext_resource type="Texture2D" uid="uid://cftltllm7iuox" path="res://Assets/Images/dg97fwa-bc3bc855-b264-4498-a827-6f2e05aabcc0.png" id="2_t0kvu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_imv2x"]
+atlas = ExtResource("2_t0kvu")
+region = Rect2(0, 0, 48, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nfbcx"]
+atlas = ExtResource("2_t0kvu")
+region = Rect2(48, 0, 48, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqt8l"]
+atlas = ExtResource("2_t0kvu")
+region = Rect2(96, 0, 48, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4v6gl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_imv2x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nfbcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yqt8l")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dnm5r"]
+size = Vector2(20, 58)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gu6xl"]
+size = Vector2(49, 75)
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1264219383]
+scale = Vector2(2, 2)
+script = ExtResource("1_ihs7i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1698359728]
+sprite_frames = SubResource("SpriteFrames_4v6gl")
+animation = &"walk"
+autoplay = "walk"
+frame_progress = 0.906022
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=631066777]
+position = Vector2(0, 19)
+shape = SubResource("RectangleShape2D_dnm5r")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=754356300]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1320452145]
+position = Vector2(0.5, 9.5)
+shape = SubResource("RectangleShape2D_gu6xl")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=239712187]
+target_position = Vector2(-43, -2)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
