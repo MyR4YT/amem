@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://deq8eitgyfqw8"]
+
+[ext_resource type="Script" uid="uid://dxwcnmoamllc7" path="res://Scripts/game_over.gd" id="1_ojehl"]
+
+[node name="GameOver" type="Control" unique_id=1648216567]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ojehl")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1442472385]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1744140397]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -29.0
+offset_right = 77.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1280719952]
+layout_mode = 2
+text = "Game Over"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=1083491910]
+layout_mode = 2
+text = "Tentar Novamente"

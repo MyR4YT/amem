@@ -67,8 +67,9 @@ func take_damage(knockback_force := Vector2(-200, -200)):
 	# Removemos totalmente o Timer daqui! 
 	# A física no _physics_process agora cuida de saber a hora exata de parar.
 
+# No arquivo Player.gd
 func die():
-	print("Game Over!")
 	Global.health = 3
 	Global.coins = 0
-	get_tree().reload_current_scene()
+	# Em vez de reload_current_scene(), chamamos a tela nova!
+	get_tree().change_scene_to_file("res://Scenes/game_over.tscn")
