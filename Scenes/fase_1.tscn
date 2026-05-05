@@ -26,6 +26,17 @@ position = Vector2(88, 435)
 
 [node name="HUD" parent="." unique_id=74278974 instance=ExtResource("3_cq7l2")]
 
+[node name="CPUParticles2D" type="CPUParticles2D" parent="HUD" unique_id=1037918566]
+position = Vector2(576, 344)
+scale = Vector2(1002.92993, 1002.92993)
+amount = 200
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+gravity = Vector2(0, 0)
+initial_velocity_max = 0.5
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+
 [node name="Coin" parent="." unique_id=1356857059 instance=ExtResource("4_efuq8")]
 position = Vector2(528, 432)
 
@@ -118,34 +129,34 @@ scale = Vector2(4, 4)
 texture = ExtResource("11_14sx1")
 
 [node name="PButton" parent="." unique_id=2109395404 instance=ExtResource("12_14sx1")]
-position = Vector2(2128.0002, 520)
+position = Vector2(2112.0002, 520)
 
 [node name="PBlock" parent="." unique_id=1391782759 instance=ExtResource("13_unq8r")]
-position = Vector2(2216.0002, 600.00006)
+position = Vector2(2200, 600.00006)
 
 [node name="PBlock2" parent="." unique_id=494007121 instance=ExtResource("13_unq8r")]
-position = Vector2(2296, 600.00006)
+position = Vector2(2280.0002, 600.00006)
 
 [node name="PBlock3" parent="." unique_id=1605546273 instance=ExtResource("13_unq8r")]
-position = Vector2(2376.0002, 600.00006)
+position = Vector2(2360, 600.00006)
 
 [node name="PBlock4" parent="." unique_id=188185327 instance=ExtResource("13_unq8r")]
-position = Vector2(2456.0002, 600)
+position = Vector2(2440, 600)
 
 [node name="PBlock5" parent="." unique_id=1792156730 instance=ExtResource("13_unq8r")]
-position = Vector2(2536, 600)
+position = Vector2(2520.0002, 600.00006)
 
 [node name="PBlock6" parent="." unique_id=419506986 instance=ExtResource("13_unq8r")]
-position = Vector2(2616.0002, 600)
+position = Vector2(2600, 600)
 
 [node name="PBlock7" parent="." unique_id=1920700459 instance=ExtResource("13_unq8r")]
-position = Vector2(1256.0001, 440)
+position = Vector2(1240, 440)
 starts_active = true
 
 [node name="PBlock8" parent="." unique_id=1637806828 instance=ExtResource("13_unq8r")]
-position = Vector2(1336, 440)
+position = Vector2(1320, 440)
 starts_active = true
 
 [node name="Flag" parent="." unique_id=663017752 instance=ExtResource("14_nyob3")]
-position = Vector2(2624, 480.00003)
+position = Vector2(2608.0002, 480)
 next_scene_path = "uid://f4rukh1h0uiq"

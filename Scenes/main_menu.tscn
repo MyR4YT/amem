@@ -57,7 +57,7 @@ grow_horizontal = 2
 pivot_offset = Vector2(57.5, 28)
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
-text = "[wave][rainbow]Sigma666777[/rainbow][/wave]"
+text = "[wave][rainbow]CITY BOYYYY[/rainbow][/wave]"
 scroll_active = false
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_btn_jogar_pressed"]

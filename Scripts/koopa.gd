@@ -3,8 +3,8 @@ var dir = 1 # Começa andando para a direita (1). Esquerda seria -1.
 
 func _physics_process(delta):
 	# Adicione gravidade aqui também igual ao player (velocity.y += gravity * delta) se quiser!
-	velocity.x = dir * -50
-	move_and_slide()
+	velocity.x = dir * -50 * delta
+	move_and_collide(velocity)
 	
 	# Se o laser (RayCast2D) bater em alguma coisa...
 	if $WallCheck.is_colliding():
