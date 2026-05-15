@@ -1,0 +1,236 @@
+[gd_scene format=4 uid="uid://b0wqkyk2vxsbt"]
+
+[ext_resource type="PackedScene" uid="uid://qsuk74x4gvpr" path="res://Objects/tile_map_mundo_1.tscn" id="1_42olf"]
+[ext_resource type="PackedScene" uid="uid://csu0l3xfaopkd" path="res://Objects/player.tscn" id="2_hbq6j"]
+[ext_resource type="PackedScene" uid="uid://b5oxalc701t3" path="res://Objects/hud.tscn" id="3_ursto"]
+[ext_resource type="AudioStream" uid="uid://b3yqjsn865vl6" path="res://Assets/Aura_KLICKAUD.mp3" id="4_yq25j"]
+[ext_resource type="Texture2D" uid="uid://b7bugcfwmdy70" path="res://Assets/1.png" id="8_d5t2u"]
+[ext_resource type="Texture2D" uid="uid://xf4m8nbkbauu" path="res://Assets/2.png" id="9_pfkk2"]
+[ext_resource type="PackedScene" uid="uid://yy4yykaits37" path="res://Objects/laser.tscn" id="10_q76ad"]
+[ext_resource type="Texture2D" uid="uid://oycydrfsjomm" path="res://Assets/4.png" id="10_uye1q"]
+[ext_resource type="Texture2D" uid="uid://dpytr27u6v1hx" path="res://Assets/3.png" id="11_wbwar"]
+
+[sub_resource type="GDScript" id="GDScript_odcco"]
+script/source = "extends Node
+
+# Declaração do sinal (Obrigatório na Godot 4 para evitar erros)
+signal beat_changed(current_beat: float)
+
+@export var bpm: float = 120.0
+@export var start_at_beat: float = 40.0 # Mude no Inspector para testar partes específicas
+
+@onready var audio_player = $AudioStreamPlayer
+
+func _ready():
+	# Converte a batida desejada para segundos
+	# Ex: Se start_at_beat for 60.0 e o BPM for 120, o tempo será 30.0 segundos
+	var start_time = (start_at_beat * 60.0) / bpm
+	
+	# Dá o play exatamente nos segundos calculados
+	audio_player.play(start_time)
+
+func _process(_delta):
+	if audio_player.playing:
+		# Posição exata do áudio + compensação de latência do hardware
+		var time = audio_player.get_playback_position() + AudioServer.get_time_since_last_mix()
+		time -= AudioServer.get_output_latency()
+		
+		var current_beat = (time * bpm) / 60.0
+		emit_signal(\"beat_changed\", current_beat)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nyob3"]
+
+[sub_resource type="Shader" id="Shader_8l4ml"]
+code = "shader_type canvas_item;
+
+// Parâmetros que controlaremos por código no ritmo da música
+uniform vec4 laser_color : source_color = vec4(0.0, 0.8, 1.0, 1.0); // Cor do laser (ex: azul/ciano)
+uniform vec4 warning_color : source_color = vec4(1.0, 0.0, 0.0, 1.0); // Vermelho do aviso
+uniform float is_warning : hint_range(0.0, 1.0) = 1.0; // 1.0 para aviso, 0.0 para laser ativo
+uniform float laser_progress : hint_range(0.0, 1.0) = 0.0; // Controla o laser descendo (0 a 1)
+
+// Parâmetros do efeito de onda (Cachoeira)
+uniform float wave_speed = 15.0;
+uniform float wave_frequency = 20.0;
+uniform float wave_amplitude = 0.03;
+
+void fragment() {
+    vec2 uv = UV;
+    
+    // Efeito de onda nas laterais (distorce o UV em X baseado no Y e no Tempo)
+    float wave = sin(uv.y * wave_frequency + TIME * wave_speed) * wave_amplitude;
+    
+    // Aplica a distorção apenas nas bordas (atenuando no centro para o laser não quebrar)
+    float border_mask = smoothstep(0.0, 0.3, uv.x) * smoothstep(1.0, 0.7, uv.x);
+    uv.x += wave * border_mask;
+    
+    // Máscara para o corpo do laser (corta as laterais fora do formato)
+    // Deixando os limites bem próximos (0.14 e 0.15), a borda fica super nítida
+	float laser_mask = smoothstep(0.14, 0.15, uv.x) * smoothstep(0.86, 0.85, uv.x);
+    
+    // Efeito de aparecer de cima para baixo
+    float growth_mask = step(uv.y, laser_progress);
+    
+    // Cor de aviso pisca com o tempo
+    float flash = mod(TIME * 5.0, 1.0) > 0.5 ? 1.0 : 0.4;
+    vec4 final_warning = warning_color * flash;
+    
+    // Interpola entre a cor de aviso e a cor do laser real
+    vec4 current_color = mix(laser_color, final_warning, is_warning);
+    
+    // Se for aviso, o laser já aparece inteiro na tela, mas translúcido e piscando
+    // Se for o laser ativo, ele obedece o crescimento de cima para baixo (growth_mask)
+    float final_alpha = mix(laser_mask * growth_mask, laser_mask * 0.6, is_warning);
+    
+    COLOR = vec4(current_color.rgb, final_alpha * current_color.a);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_odcco"]
+shader = SubResource("Shader_8l4ml")
+shader_parameter/laser_color = Color(0, 0.8, 1, 1)
+shader_parameter/warning_color = Color(1, 0, 0, 0.4)
+shader_parameter/is_warning = 1.0
+shader_parameter/laser_progress = 0.0
+shader_parameter/wave_speed = 8.0
+shader_parameter/wave_frequency = 15.0
+shader_parameter/wave_amplitude = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q76ad"]
+shader = SubResource("Shader_8l4ml")
+shader_parameter/laser_color = Color(0, 0.8, 1, 1)
+shader_parameter/warning_color = Color(1, 0, 0, 0.4)
+shader_parameter/is_warning = 1.0
+shader_parameter/laser_progress = 0.0
+shader_parameter/wave_speed = 8.0
+shader_parameter/wave_frequency = 15.0
+shader_parameter/wave_amplitude = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nuv35"]
+shader = SubResource("Shader_8l4ml")
+shader_parameter/laser_color = Color(0, 0.8, 1, 1)
+shader_parameter/warning_color = Color(1, 0, 0, 0.4)
+shader_parameter/is_warning = 1.0
+shader_parameter/laser_progress = 0.0
+shader_parameter/wave_speed = 8.0
+shader_parameter/wave_frequency = 15.0
+shader_parameter/wave_amplitude = 0.05
+
+[node name="Fase 1" type="Node2D" unique_id=63488111]
+script = SubResource("GDScript_odcco")
+
+[node name="TileMapMundo1" parent="." unique_id=360711382 instance=ExtResource("1_42olf")]
+scale = Vector2(5, 5)
+tile_map_data = PackedByteArray("AAD0/wcAAAAFAAAAAAANAAcAAAAFAAAAABD1/wcAAAAGAAAAAAD2/wcAAAAGAAAAAAD3/wcAAAAGAAAAAAD4/wcAAAAGAAAAAAD5/wcAAAAGAAAAAAD6/wcAAAAGAAAAAAD7/wcAAAAGAAAAAAD8/wcAAAAGAAAAAAD9/wcAAAAGAAAAAAD+/wcAAAAGAAAAAAD//wcAAAAGAAAAAAAAAAcAAAAGAAAAAAABAAcAAAAGAAAAAAACAAcAAAAGAAAAAAADAAcAAAAGAAAAAAAEAAcAAAAGAAAAAAAFAAcAAAAGAAAAAAAGAAcAAAAGAAAAAAAHAAcAAAAGAAAAAAAIAAcAAAAGAAAAAAAJAAcAAAAGAAAAAAAKAAcAAAAGAAAAAAALAAcAAAAGAAAAAAAMAAcAAAAGAAAAAAD0/wgAAAAFAAEAAAANAAgAAAAFAAEAABD0/wkAAAAFAAIAAAD1/woAAAAFAAIAAAD2/wsAAAAFAAIAAAD3/wsAAAAGAAIAAAD4/wsAAAAGAAIAAAD5/wsAAAAGAAIAAAD6/wsAAAAGAAIAAAD7/wsAAAAGAAIAAAD8/wsAAAAGAAIAAAD9/wsAAAAGAAIAAAD+/wsAAAAGAAIAAAD//wsAAAAGAAIAAAAAAAsAAAAGAAIAAAABAAsAAAAGAAIAAAACAAsAAAAGAAIAAAADAAsAAAAGAAIAAAAEAAsAAAAGAAIAAAAFAAsAAAAGAAIAAAAGAAsAAAAGAAIAAAAHAAsAAAAGAAIAAAAIAAsAAAAGAAIAAAAJAAsAAAAGAAIAAAAMAAkAAAAGAAEAAAALAAoAAAAGAAEAAAALAAsAAAAFAAIAABAMAAoAAAAFAAIAABANAAkAAAAFAAIAABD2/woAAAAGAAEAAAD3/woAAAAGAAEAAAD4/woAAAAGAAEAAAD5/woAAAAGAAEAAAD6/woAAAAGAAEAAAD7/woAAAAGAAEAAAD8/woAAAAGAAEAAAD9/woAAAAGAAEAAAD+/woAAAAGAAEAAAD//woAAAAGAAEAAAAAAAoAAAAGAAEAAAABAAoAAAAGAAEAAAACAAoAAAAGAAEAAAADAAoAAAAGAAEAAAAEAAoAAAAGAAEAAAAFAAoAAAAGAAEAAAAGAAoAAAAGAAEAAAAHAAoAAAAGAAEAAAAIAAoAAAAGAAEAAAAJAAoAAAAGAAEAAAAKAAoAAAAGAAEAAAAKAAsAAAAGAAIAAAD1/wkAAAAGAAEAAAD2/wkAAAAGAAEAAAD3/wkAAAAGAAEAAAD4/wkAAAAGAAEAAAD5/wkAAAAGAAEAAAD6/wkAAAAGAAEAAAD7/wkAAAAGAAEAAAD8/wkAAAAGAAEAAAD9/wkAAAAGAAEAAAD+/wkAAAAGAAEAAAD//wkAAAAGAAEAAAAAAAkAAAAGAAEAAAABAAkAAAAGAAEAAAACAAkAAAAGAAEAAAADAAkAAAAGAAEAAAAEAAkAAAAGAAEAAAAFAAkAAAAGAAEAAAAGAAkAAAAGAAEAAAAHAAkAAAAGAAEAAAAIAAkAAAAGAAEAAAAJAAkAAAAGAAEAAAAKAAkAAAAGAAEAAAALAAkAAAAGAAEAAAD1/wgAAAAGAAEAAAD2/wgAAAAGAAEAAAD3/wgAAAAGAAEAAAD4/wgAAAAGAAEAAAD5/wgAAAAGAAEAAAD6/wgAAAAGAAEAAAD7/wgAAAAGAAEAAAD8/wgAAAAGAAEAAAD9/wgAAAAGAAEAAAD+/wgAAAAGAAEAAAD//wgAAAAGAAEAAAAAAAgAAAAGAAEAAAABAAgAAAAGAAEAAAACAAgAAAAGAAEAAAADAAgAAAAGAAEAAAAEAAgAAAAGAAEAAAAFAAgAAAAGAAEAAAAGAAgAAAAGAAEAAAAHAAgAAAAGAAEAAAAIAAgAAAAGAAEAAAAJAAgAAAAGAAEAAAAKAAgAAAAGAAEAAAALAAgAAAAGAAEAAAAMAAgAAAAGAAEAAAA=")
+
+[node name="Player" parent="." unique_id=337665329 instance=ExtResource("2_hbq6j")]
+position = Vector2(88, 435)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Player" unique_id=1037918566]
+position = Vector2(0, -91)
+scale = Vector2(1002.92993, 1002.92993)
+amount = 200
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+gravity = Vector2(0, 0)
+initial_velocity_max = 0.5
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+
+[node name="HUD" parent="." unique_id=74278974 instance=ExtResource("3_ursto")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=445133402]
+stream = ExtResource("4_yq25j")
+autoplay = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1336328954]
+
+[node name="Parallax2D" type="Parallax2D" parent="ParallaxBackground" unique_id=1384122731]
+scale = Vector2(4, 4)
+repeat_size = Vector2(2304, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/Parallax2D" unique_id=684888708]
+position = Vector2(1024, 528)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_d5t2u")
+
+[node name="ParallaxLayer2" type="Parallax2D" parent="ParallaxBackground" unique_id=1723021684]
+scroll_scale = Vector2(1.1, 1)
+repeat_size = Vector2(2304, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=981814484]
+position = Vector2(1024, 528)
+scale = Vector2(4, 4)
+texture = ExtResource("9_pfkk2")
+
+[node name="ParallaxLayer3" type="Parallax2D" parent="ParallaxBackground" unique_id=2101474114]
+scroll_scale = Vector2(1.2, 1)
+repeat_size = Vector2(2304, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=248350626]
+position = Vector2(1024, 528)
+scale = Vector2(4, 4)
+texture = ExtResource("10_uye1q")
+
+[node name="ParallaxLayer4" type="Parallax2D" parent="ParallaxBackground" unique_id=1783498682]
+scroll_scale = Vector2(1.3, 1)
+repeat_size = Vector2(2304, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer4" unique_id=935487686]
+position = Vector2(1024, 528)
+scale = Vector2(4, 4)
+texture = ExtResource("11_wbwar")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1931314645]
+position = Vector2(217, 1578)
+scale = Vector2(431.04828, 5.669802)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2127347112]
+shape = SubResource("RectangleShape2D_nyob3")
+
+[node name="Laser" parent="." unique_id=1540857372 instance=ExtResource("10_q76ad")]
+visible = false
+offset_left = -87.99997
+offset_top = -200.0
+offset_right = -47.99997
+offset_bottom = -132.72519
+scale = Vector2(11.32913, 11.32913)
+
+[node name="Laser2" parent="." unique_id=1247091631 instance=ExtResource("10_q76ad")]
+material = SubResource("ShaderMaterial_odcco")
+offset_left = -1016.0
+offset_top = -200.0
+offset_right = -976.0
+offset_bottom = -132.72519
+scale = Vector2(11.32913, 11.32913)
+beat_to_warn = 40.0
+beat_to_fire = 60.0
+"beat_to_流_end" = 70.0
+
+[node name="Laser3" parent="." unique_id=1252219434 instance=ExtResource("10_q76ad")]
+material = SubResource("ShaderMaterial_q76ad")
+offset_left = -681.00006
+offset_top = -200.0
+offset_right = -641.00006
+offset_bottom = -132.72519
+scale = Vector2(11.32913, 11.32913)
+beat_to_warn = 45.0
+beat_to_fire = 60.0
+"beat_to_流_end" = 70.0
+
+[node name="Laser4" parent="." unique_id=415323826 instance=ExtResource("10_q76ad")]
+material = SubResource("ShaderMaterial_nuv35")
+offset_left = -344.00003
+offset_top = -200.0
+offset_right = -304.00003
+offset_bottom = -132.72519
+scale = Vector2(11.32913, 11.32913)
+beat_to_warn = 50.0
+beat_to_fire = 60.0
+"beat_to_流_end" = 70.0
+
+[connection signal="body_entered" from="Area2D" to="Player" method="_on_area_2d_body_entered"]
