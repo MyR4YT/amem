@@ -6,6 +6,7 @@ var is_hurting := false
 
 @onready var anim = $AnimatedSprite2D
 @onready var anit = $AnimationPlayer
+@onready var cam = $Camera2D
 var side = 2
 
 func _physics_process(delta: float) -> void:
@@ -48,7 +49,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
-
+	
 func take_damage(knockback_force := Vector2(-200, -200)):
 	if is_hurting: return 
 	
@@ -69,5 +70,6 @@ func die():
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	print("d")
-	die()
+	if body.name == "Player":
+		print("d")
+		die()

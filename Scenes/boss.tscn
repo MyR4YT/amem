@@ -4,11 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://csu0l3xfaopkd" path="res://Objects/player.tscn" id="2_hbq6j"]
 [ext_resource type="PackedScene" uid="uid://b5oxalc701t3" path="res://Objects/hud.tscn" id="3_ursto"]
 [ext_resource type="AudioStream" uid="uid://b3yqjsn865vl6" path="res://Assets/Aura_KLICKAUD.mp3" id="4_yq25j"]
-[ext_resource type="Texture2D" uid="uid://b7bugcfwmdy70" path="res://Assets/1.png" id="8_d5t2u"]
-[ext_resource type="Texture2D" uid="uid://xf4m8nbkbauu" path="res://Assets/2.png" id="9_pfkk2"]
+[ext_resource type="Texture2D" uid="uid://dovxi1in5dpw1" path="res://Assets/Images/1.png" id="5_yq25j"]
+[ext_resource type="Texture2D" uid="uid://3pdin4l6vqbb" path="res://Assets/Images/2.png" id="6_odcco"]
+[ext_resource type="Texture2D" uid="uid://c0q7oheaaynrq" path="res://Assets/Images/3.png" id="7_q76ad"]
 [ext_resource type="PackedScene" uid="uid://yy4yykaits37" path="res://Objects/laser.tscn" id="10_q76ad"]
-[ext_resource type="Texture2D" uid="uid://oycydrfsjomm" path="res://Assets/4.png" id="10_uye1q"]
-[ext_resource type="Texture2D" uid="uid://dpytr27u6v1hx" path="res://Assets/3.png" id="11_wbwar"]
 
 [sub_resource type="GDScript" id="GDScript_odcco"]
 script/source = "extends Node
@@ -147,23 +146,25 @@ autoplay = true
 
 [node name="Parallax2D" type="Parallax2D" parent="ParallaxBackground" unique_id=1384122731]
 scale = Vector2(4, 4)
+scroll_offset = Vector2(6680, -1454)
 repeat_size = Vector2(2304, 0)
 repeat_times = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/Parallax2D" unique_id=684888708]
-position = Vector2(1024, 528)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("8_d5t2u")
+position = Vector2(874, 886.25)
+scale = Vector2(4, 4)
+texture = ExtResource("5_yq25j")
 
 [node name="ParallaxLayer2" type="Parallax2D" parent="ParallaxBackground" unique_id=1723021684]
 scroll_scale = Vector2(1.1, 1)
+scroll_offset = Vector2(2025, -178)
 repeat_size = Vector2(2304, 0)
 repeat_times = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=981814484]
 position = Vector2(1024, 528)
 scale = Vector2(4, 4)
-texture = ExtResource("9_pfkk2")
+texture = ExtResource("6_odcco")
 
 [node name="ParallaxLayer3" type="Parallax2D" parent="ParallaxBackground" unique_id=2101474114]
 scroll_scale = Vector2(1.2, 1)
@@ -173,17 +174,7 @@ repeat_times = 3
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=248350626]
 position = Vector2(1024, 528)
 scale = Vector2(4, 4)
-texture = ExtResource("10_uye1q")
-
-[node name="ParallaxLayer4" type="Parallax2D" parent="ParallaxBackground" unique_id=1783498682]
-scroll_scale = Vector2(1.3, 1)
-repeat_size = Vector2(2304, 0)
-repeat_times = 3
-
-[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer4" unique_id=935487686]
-position = Vector2(1024, 528)
-scale = Vector2(4, 4)
-texture = ExtResource("11_wbwar")
+texture = ExtResource("7_q76ad")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1931314645]
 position = Vector2(217, 1578)

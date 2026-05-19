@@ -6,6 +6,8 @@ var gravity = 980.0
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
+	if velocity.y == 0:
+		velocity.x = 0
 	move_and_slide()
 
 # Função gerada pelo sinal timeout() do Timer! Ela roda a cada 2 segundos.

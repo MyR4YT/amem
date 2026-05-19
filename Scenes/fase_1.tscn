@@ -93,12 +93,11 @@ position = Vector2(1496, 344)
 
 [node name="Parallax2D" type="Parallax2D" parent="ParallaxBackground" unique_id=1384122731]
 scale = Vector2(4, 4)
-repeat_size = Vector2(2304, 0)
+repeat_size = Vector2(576, 0)
 repeat_times = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/Parallax2D" unique_id=684888708]
-position = Vector2(1024, 528)
-scale = Vector2(0.5, 0.5)
+position = Vector2(256, 120)
 texture = ExtResource("8_5p4kr")
 
 [node name="ParallaxLayer2" type="Parallax2D" parent="ParallaxBackground" unique_id=1723021684]
